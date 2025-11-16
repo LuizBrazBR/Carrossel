@@ -75,10 +75,13 @@ export default class Slider {
     this.setStyle(true);
     if (
       this.dist.distDiff <
-      -this.getSlidePosition()[this.slideStatus.current].offsetLeft
+      -this.getSlidePosition()[this.slideStatus.current].offsetLeft - 50
     ) {
       this.onNext();
-    } else {
+    } else if (
+      this.dist.distDiff >
+      -this.getSlidePosition()[this.slideStatus.current].offsetLeft + 50
+    ) {
       this.onPrev();
     }
   }
@@ -129,6 +132,7 @@ export default class Slider {
   }
 
   init() {
+    this.goToSlide(0);
     this.onStart();
   }
 }
