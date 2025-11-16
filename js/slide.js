@@ -17,6 +17,48 @@ export default class Slider {
       distDiff: 0,
       distFinal: 0,
     };
+
+    this.slideStatus = {
+      prev: null,
+      current: 0,
+      next: 1,
+    };
+  }
+
+  setStyle(active) {
+    active
+      ? (this.slider.style.transition = "0.3s")
+      : (this.slider.style.transition = "");
+  }
+
+  getSlidePosition() {
+    const slides = [...this.slider.children].map((element) => {
+      const total = (this.wrapper.offsetWidth - element.offsetWidth) / 2;
+      const offsetLeft = element.offsetLeft - total;
+      return {
+        element,
+        offsetLeft,
+      };
+    });
+    return slides;
+  }
+
+  goToSlide(index) {
+    this.slideMove(-this.getSlidePosition()[index].offsetLeft);
+    this.getIndex(index);
+    this.dist.distFinal = -this.getSlidePosition()[index].offsetLeft;
+  }
+
+  getIndex(index) {
+    const length = this.getSlidePosition().length - 1;
+    (this.slideStatus.current = index),
+      (this.slideStatus.prev = this.slideStatus.current
+        ? this.slideStatus.current - 1
+        : null),
+      (this.slideStatus.next =
+        this.slideStatus.current + 1 > length
+          ? null
+          : this.slideStatus.current + 1);
   }
 
   slideMove(diff) {
@@ -30,6 +72,31 @@ export default class Slider {
       this.wrapper.removeEventListener("touchmove", this.onMouseMove);
     }
     this.dist.distFinal = this.dist.distDiff;
+    this.setStyle(true);
+    if (
+      this.dist.distDiff <
+      -this.getSlidePosition()[this.slideStatus.current].offsetLeft
+    ) {
+      this.onNext();
+    } else {
+      this.onPrev();
+    }
+  }
+
+  onPrev() {
+    if (this.slideStatus.prev !== null) {
+      this.goToSlide(this.slideStatus.prev);
+    } else {
+      this.goToSlide(this.slideStatus.current);
+    }
+  }
+
+  onNext() {
+    if (this.slideStatus.next !== null) {
+      this.goToSlide(this.slideStatus.next);
+    } else {
+      this.goToSlide(this.slideStatus.current);
+    }
   }
 
   _onMouseMove(e) {
@@ -39,11 +106,12 @@ export default class Slider {
       e.preventDefault();
       this.dist.distDiff = e.touches[0].clientX - this.dist.startx;
     }
-    this.slideMove(this.dist.distDiff * 1.6);
+    this.slideMove(this.dist.distDiff);
   }
 
   _onMouseDown(e) {
     e.preventDefault();
+    this.setStyle(false);
     if (e.type === "mousedown") {
       this.wrapper.addEventListener("mousemove", this.onMouseMove);
       this.dist.startx = e.clientX - this.dist.distFinal;
