@@ -24,24 +24,40 @@ export default class Slider {
   }
 
   _onMouseUp(e) {
-    this.wrapper.removeEventListener("mousemove", this.onMouseMove);
+    if (e.type === "mouseup") {
+      this.wrapper.removeEventListener("mousemove", this.onMouseMove);
+    } else {
+      this.wrapper.removeEventListener("touchmove", this.onMouseMove);
+    }
     this.dist.distFinal = this.dist.distDiff;
   }
 
   _onMouseMove(e) {
-    this.dist.distDiff = e.clientX - this.dist.startx;
+    if (e.type === "mousemove") {
+      this.dist.distDiff = e.clientX - this.dist.startx;
+    } else {
+      e.preventDefault();
+      this.dist.distDiff = e.touches[0].clientX - this.dist.startx;
+    }
     this.slideMove(this.dist.distDiff * 1.6);
   }
 
   _onMouseDown(e) {
     e.preventDefault();
-    this.dist.startx = e.clientX - this.dist.distFinal;
-    this.wrapper.addEventListener("mousemove", this.onMouseMove);
+    if (e.type === "mousedown") {
+      this.wrapper.addEventListener("mousemove", this.onMouseMove);
+      this.dist.startx = e.clientX - this.dist.distFinal;
+    } else {
+      this.wrapper.addEventListener("touchmove", this.onMouseMove);
+      this.dist.startx = e.touches[0].clientX - this.dist.distFinal;
+    }
   }
 
   onStart() {
     this.wrapper.addEventListener("mousedown", this.onMouseDown);
+    this.wrapper.addEventListener("touchstart", this.onMouseDown);
     this.wrapper.addEventListener("mouseup", this.onMouseUp);
+    this.wrapper.addEventListener("touchend", this.onMouseUp);
   }
 
   init() {
