@@ -159,7 +159,6 @@ export default class Slider {
 
   init() {
     this.addResizeEvent();
-    this.onResize();
     this.goToSlide(0);
     this.onCurrent();
     this.onStart();
