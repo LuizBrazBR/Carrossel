@@ -28,4 +28,13 @@ ul {
   flex-shrink: 0;
   max-width: 800px;
   margin: 0 20px;
+  transform: scale(0.8);
+  opacity: 0.5;
+  transition: 0.3s;
+  will-change: transform, opacity;
+}
+
+.slider li.active {
+  transform: scale(1);
+  opacity: 1;
 }

@@ -1,3 +1,5 @@
+import debounce from "./debounce.js";
+
 export default class Slider {
   constructor(slider, wrapper) {
     this.slider = document.querySelector(slider);
@@ -11,6 +13,10 @@ export default class Slider {
     this.onMouseUp = (e) => {
       this._onMouseUp(e);
     };
+
+    this.onResize = debounce(() => {
+      this._onResize();
+    }, 100);
 
     this.dist = {
       startx: 0,
@@ -84,6 +90,7 @@ export default class Slider {
     ) {
       this.onPrev();
     }
+    this.onCurrent();
   }
 
   onPrev() {
@@ -131,8 +138,30 @@ export default class Slider {
     this.wrapper.addEventListener("touchend", this.onMouseUp);
   }
 
+  onCurrent() {
+    this.slides = [...this.slider.children];
+    this.slides.forEach((e) => {
+      e.classList.remove("active");
+    });
+    this.slides[this.slideStatus.current].classList.add("active");
+  }
+
+  _onResize() {
+    setTimeout(() => {
+      this.getSlidePosition();
+      this.goToSlide(this.slideStatus.current);
+    }, 300);
+  }
+
+  addResizeEvent() {
+    window.addEventListener("resize", this.onResize);
+  }
+
   init() {
+    this.addResizeEvent();
+    this.onResize();
     this.goToSlide(0);
+    this.onCurrent();
     this.onStart();
   }
 }
