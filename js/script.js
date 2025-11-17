@@ -1,4 +1,5 @@
-import Slider from "./slide.js";
+import { SliderButton } from "./slide.js";
 
-const slider = new Slider(".slider", ".wrapper");
+const slider = new SliderButton(".slider", ".wrapper");
+slider.onNav(".prev", ".next");
 slider.init();

@@ -1,6 +1,6 @@
 import debounce from "./debounce.js";
 
-export default class Slider {
+export class Slider {
   constructor(slider, wrapper) {
     this.slider = document.querySelector(slider);
     this.wrapper = document.querySelector(wrapper);
@@ -12,6 +12,14 @@ export default class Slider {
     };
     this.onMouseUp = (e) => {
       this._onMouseUp(e);
+    };
+
+    this.onPrev = () => {
+      this._onPrev();
+    };
+
+    this.onNext = () => {
+      this._onNext();
     };
 
     this.onResize = debounce(() => {
@@ -93,17 +101,21 @@ export default class Slider {
     this.onCurrent();
   }
 
-  onPrev() {
+  _onPrev() {
     if (this.slideStatus.prev !== null) {
+      this.setStyle(true);
       this.goToSlide(this.slideStatus.prev);
+      this.onCurrent();
     } else {
       this.goToSlide(this.slideStatus.current);
     }
   }
 
-  onNext() {
+  _onNext() {
     if (this.slideStatus.next !== null) {
+      this.setStyle(true);
       this.goToSlide(this.slideStatus.next);
+      this.onCurrent();
     } else {
       this.goToSlide(this.slideStatus.current);
     }
@@ -162,5 +174,18 @@ export default class Slider {
     this.goToSlide(0);
     this.onCurrent();
     this.onStart();
+  }
+}
+
+export class SliderButton extends Slider {
+  onNav(prev, next) {
+    this.prevArrow = document.querySelector(prev);
+    this.nextArrow = document.querySelector(next);
+    this.onNavEvent();
+  }
+
+  onNavEvent() {
+    this.prevArrow.addEventListener("click", this.onPrev);
+    this.nextArrow.addEventListener("click", this.onNext);
   }
 }
