@@ -16,11 +16,11 @@ ul {
 }
 
 .wrapper {
+  margin-top: 20px;
   overflow: hidden;
 }
 
 .slider {
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,6 +35,9 @@ ul {
   opacity: 0.5;
   transition: 0.3s;
   will-change: transform, opacity;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 .slider li.active {
@@ -52,7 +55,7 @@ ul {
   font-size: 22px;
   cursor: pointer;
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   backdrop-filter: blur(3px);
   transition: 0.3s;
@@ -68,4 +71,26 @@ ul {
 }
 .next {
   right: 15px;
+}
+
+[data-control="slider"] {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+[data-control="slider"] li {
+  background-color: #ffbb55;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  text-indent: -999px;
+  cursor: pointer;
+}
+
+[data-control="slider"] li.active,
+[data-control="slider"] li:hover {
+  background-color: #ee5544;
 }

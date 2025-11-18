@@ -37,6 +37,8 @@ export class Slider {
       current: 0,
       next: 1,
     };
+
+    this.slide = new Event("slide");
   }
 
   setStyle(active) {
@@ -61,6 +63,7 @@ export class Slider {
     this.slideMove(-this.getSlidePosition()[index].offsetLeft);
     this.getIndex(index);
     this.dist.distFinal = -this.getSlidePosition()[index].offsetLeft;
+    this.wrapper.dispatchEvent(this.slide);
   }
 
   getIndex(index) {
@@ -187,5 +190,42 @@ export class SliderButton extends Slider {
   onNavEvent() {
     this.prevArrow.addEventListener("click", this.onPrev);
     this.nextArrow.addEventListener("click", this.onNext);
+  }
+
+  createPaginacao() {
+    const nav = document.querySelector("div.nav");
+    this.tag = document.createElement("ul");
+    this.tag.setAttribute("data-control", "slider");
+    this.slides.forEach((slide, index) => {
+      this.tag.innerHTML += `<li><a href="#${index}">${index + 1}</a></li>`;
+    });
+
+    nav.appendChild(this.tag);
+    //tag.classList.add(classe);
+  }
+
+  activePaginacao() {
+    this.createPaginacao();
+    this.tag.children[this.slideStatus.current].classList.add("active");
+
+    this.wrapper.addEventListener("slide", (e) => {
+      this.slides.forEach((slide, index) => {
+        if (this.tag.children[index].classList.contains("active"))
+          this.tag.children[index].classList.remove("active");
+      });
+      this.tag.children[this.slideStatus.current].classList.add("active");
+    });
+    this.slides.forEach((slide, index) => {
+      this.tag.children[index].addEventListener("click", () => {
+        this.slides.forEach((slide, index) => {
+          if (this.tag.children[index].classList.contains("active"))
+            this.tag.children[index].classList.remove("active");
+        });
+        this.tag.children[index].classList.add("active");
+        this.setStyle(true);
+        this.goToSlide(index);
+        this.onCurrent();
+      });
+    });
   }
 }
