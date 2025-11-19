@@ -37,8 +37,6 @@ export class Slider {
       current: 0,
       next: 1,
     };
-
-    this.slide = new Event("slide");
   }
 
   setStyle(active) {
@@ -181,6 +179,11 @@ export class Slider {
 }
 
 export class SliderButton extends Slider {
+  constructor(...args) {
+    super(...args);
+    this.slide = new Event("slide");
+  }
+
   onNav(prev, next) {
     this.prevArrow = document.querySelector(prev);
     this.nextArrow = document.querySelector(next);
@@ -204,24 +207,29 @@ export class SliderButton extends Slider {
     //tag.classList.add(classe);
   }
 
-  activePaginacao() {
-    this.createPaginacao();
-    this.tag.children[this.slideStatus.current].classList.add("active");
+  activePaginacao(classActive, custom) {
+    this.custom = custom
+      ? document.querySelector(custom)
+      : this.createPaginacao();
+
+    this.arrayChildren = custom ? this.custom.children : this.tag.children;
+
+    this.arrayChildren[this.slideStatus.current].classList.add(classActive);
 
     this.wrapper.addEventListener("slide", (e) => {
       this.slides.forEach((slide, index) => {
-        if (this.tag.children[index].classList.contains("active"))
-          this.tag.children[index].classList.remove("active");
+        if (this.arrayChildren[index].classList.contains(classActive))
+          this.arrayChildren[index].classList.remove(classActive);
       });
-      this.tag.children[this.slideStatus.current].classList.add("active");
+      this.arrayChildren[this.slideStatus.current].classList.add(classActive);
     });
     this.slides.forEach((slide, index) => {
-      this.tag.children[index].addEventListener("click", () => {
+      this.arrayChildren[index].addEventListener("click", () => {
         this.slides.forEach((slide, index) => {
-          if (this.tag.children[index].classList.contains("active"))
-            this.tag.children[index].classList.remove("active");
+          if (this.arrayChildren[index].classList.contains(classActive))
+            this.arrayChildren[index].classList.remove(classActive);
         });
-        this.tag.children[index].classList.add("active");
+        this.arrayChildren[index].classList.add(classActive);
         this.setStyle(true);
         this.goToSlide(index);
         this.onCurrent();
