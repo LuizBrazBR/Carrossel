@@ -101,17 +101,6 @@ ul {
   scale: 1;
 }
 
-@media (hover: hover) {
-  .nav-top li:hover {
-    opacity: 1;
-    scale: 1;
-  }
-
-  [data-control="slider"] li:hover {
-    background-color: #ee5544;
-  }
-}
-
 [data-control="slider"] li {
   background-color: #ffbb55;
   border-radius: 50%;
