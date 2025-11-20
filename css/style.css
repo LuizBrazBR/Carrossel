@@ -97,10 +97,16 @@ ul {
   scale: 0.8;
 }
 
-.nav-top li.active,
-.nav-top li:hover {
+.nav-top li.active {
   opacity: 1;
   scale: 1;
+}
+
+@media (hover: hover) {
+  .nav-top li:hover {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 [data-control="slider"] li {
