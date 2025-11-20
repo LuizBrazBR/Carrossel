@@ -55,7 +55,6 @@ ul {
   font-size: 22px;
   cursor: pointer;
   position: absolute;
-  top: 40%;
   transform: translateY(-50%);
   backdrop-filter: blur(3px);
   transition: 0.3s;
@@ -107,6 +106,10 @@ ul {
     opacity: 1;
     scale: 1;
   }
+
+  [data-control="slider"] li:hover {
+    background-color: #ee5544;
+  }
 }
 
 [data-control="slider"] li {
@@ -119,7 +122,6 @@ ul {
   cursor: pointer;
 }
 
-[data-control="slider"] li.active,
-[data-control="slider"] li:hover {
+[data-control="slider"] li.active {
   background-color: #ee5544;
 }
